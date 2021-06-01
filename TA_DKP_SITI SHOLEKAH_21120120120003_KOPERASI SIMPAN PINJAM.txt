@@ -1,0 +1,203 @@
+import sun.misc.FloatingDecimal;
+import java.text.DecimalFormat;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+public class Koperasi {
+    private JTextField NamaText;
+    private JTextField NoTelpText;
+    private JTextField PekerjaanText;
+    private JTextField JumlahSimpText;
+    private JButton buttonProsses;
+    public JComboBox cbJenisTransaksi;
+    private JPanel koperasi;
+    private JButton hitungButton;
+    private JButton hapusButton1;
+    private JTextField textTanggal;
+    private JTextArea textAlamat;
+    private JRadioButton lakiLakiRadioButton;
+    private JRadioButton perempuanRadioButton;
+    private JComboBox comboBox1;
+    private JTextField textPinjaman;
+    private JTextField textLamaPinjaman;
+    private JTextField textbunga;
+    private JTextField textAngsuran;
+    private JLabel PanelBukti;
+    private JLabel labelTanggalTransaksi;
+    private JLabel textJenisTransaksi;
+    private JLabel textNamaAnggota;
+    private JLabel textTotal;
+    private JLabel textTerbilang;
+    private JLabel labelPemberi;
+    private JLabel labelNamaPemberi;
+    private JButton buttonCetak;
+    private JLabel labelBendahara;
+    private JLabel labelAngsuran;
+    private JButton btnKeluar;
+
+    public String angka(int satuan){
+        String[] huruf = { "", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas" };
+        String hasil = " ";
+        if (satuan < 12)
+            hasil = hasil + huruf[satuan];
+        else if (satuan < 20)
+            hasil = hasil + angka(satuan - 10) + " Belas";
+        else if (satuan < 100)
+            hasil = hasil + angka(satuan / 10) + " Puluh " + angka(satuan % 10);
+        else if (satuan < 200)
+            hasil = hasil + "Seratus " + angka(satuan - 100);
+        else if (satuan < 1000)
+            hasil = hasil + angka(satuan / 100) + " Ratus "  + angka(satuan % 100);
+        else if (satuan < 2000)
+            hasil = hasil + "Seribu " + angka(satuan - 1000);
+        else if (satuan < 1000000)
+            hasil = hasil + angka(satuan / 1000) + " Ribu " + angka(satuan % 1000);
+        else if (satuan < 1000000000)
+            hasil = hasil + angka(satuan / 1000000) + " Juta " + angka(satuan % 1000000);
+        else if (satuan >= 1000000000)
+            hasil = "Angka terlalu besar, harus kurang dari 1 milyar!";
+        return hasil;
+
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        frame.setContentPane(new Koperasi().koperasi);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
+    public Koperasi() {
+
+        cbJenisTransaksi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String Jenis_Transaksi;
+                int sp = 50000;
+                int sw = 25000;
+                Jenis_Transaksi = (String) cbJenisTransaksi.getSelectedItem();
+                if(Jenis_Transaksi == "Simpanan_Pokok"){
+                    JumlahSimpText.setText(""+sp);
+                    textPinjaman.setText("-");
+                    textLamaPinjaman.setText("-");
+                    textbunga.setText("-");
+                    textAngsuran.setText("-");
+                }else if (Jenis_Transaksi == "Simpanan_Wajib"){
+                    JumlahSimpText.setText(""+sw);
+                    textPinjaman.setText("-");
+                    textLamaPinjaman.setText("-");
+                    textbunga.setText("-");
+                    textAngsuran.setText("-");
+                } else if(Jenis_Transaksi == "Simpanan_Sukarela"){
+                    textPinjaman.setText("-");
+                    textLamaPinjaman.setText("-");
+                    textbunga.setText("-");
+                    textAngsuran.setText("-");
+                } else if(Jenis_Transaksi == "Pinjaman"){
+                    textPinjaman.setText("");
+                    textbunga.setText("5%");
+                    JumlahSimpText.setText("-");
+                }
+            }
+        });
+        hitungButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DecimalFormat df = new DecimalFormat("#.##");
+                double JumlahPinjaman = FloatingDecimal.parseDouble(textPinjaman.getText());
+                double Angsur;
+                double Pembayaran;
+                int bunga = 5;
+                double LamaPinjaman= FloatingDecimal.parseDouble(textLamaPinjaman.getText());
+                Angsur = JumlahPinjaman/LamaPinjaman;
+                Pembayaran = Angsur+(JumlahPinjaman*bunga/100);
+                textAngsuran.setText(String.format("%.2f %n", Pembayaran));
+            }
+        });
+        hapusButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NamaText.setText(" ");
+                textAlamat.setText(" ");
+                NoTelpText.setText(" ");
+                comboBox1.setToolTipText("");
+                cbJenisTransaksi.setToolTipText("");
+                PekerjaanText.setText("");
+                textTanggal.setText(" ");
+                textPinjaman.setText(" ");
+                textLamaPinjaman.setText(" ");
+                textbunga.setText(" ");
+                JumlahSimpText.setText("");
+                textAngsuran.setText("");
+                labelTanggalTransaksi.setText("");
+                textJenisTransaksi.setText("");
+                textNamaAnggota.setText("");
+                textTotal.setText("");
+                textTerbilang.setText("");
+                labelPemberi.setText("");
+                labelNamaPemberi.setText("");
+                labelBendahara.setText("");
+                labelAngsuran.setText("");
+            }
+        });
+
+        buttonProsses.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                labelTanggalTransaksi.setText(textTanggal.getText());
+                textJenisTransaksi.setText("" + cbJenisTransaksi.getSelectedItem());
+                textNamaAnggota.setText("" + NamaText.getText());
+                labelBendahara.setText("Siti Sholekah");
+
+                String Ket;
+                String PP;
+                PP = (String) cbJenisTransaksi.getSelectedItem();
+                Ket = labelPemberi.getText();
+                if (PP == "Simpanan_Pokok") {
+                    Ket = "Penabung";
+                    labelPemberi.setText("" + Ket);
+                    labelNamaPemberi.setText(NamaText.getText());
+                    textTotal.setText("" + JumlahSimpText.getText());
+                } else if (PP == "Simpanan_Wajib") {
+                    Ket = "Penabung";
+                    labelPemberi.setText("" + Ket);
+                    labelNamaPemberi.setText(NamaText.getText());
+                    textTotal.setText("" + JumlahSimpText.getText());
+                } else if (PP == "Simpanan_Sukarela") {
+                    Ket = "Penabung";
+                    labelPemberi.setText("" + Ket);
+                    labelNamaPemberi.setText(NamaText.getText());
+                    textTotal.setText("" + JumlahSimpText.getText());
+                } else if (PP == "Pinjaman") {
+                    Ket = "Peminjam";
+                    labelPemberi.setText("" + Ket);
+                    labelNamaPemberi.setText(NamaText.getText());
+                    textTotal.setText("" + textPinjaman.getText());
+                    labelAngsuran.setText("dengan angsuran "+textAngsuran.getText()+" selama "+textLamaPinjaman.getText()+" bulan");
+                }
+                Koperasi koperasi = new Koperasi();
+                int konvert = Integer.parseInt(textTotal.getText());
+                if (konvert < 0 || konvert >999999999) {
+                    JOptionPane.showMessageDialog(null,"Angka di luar range!!!" ,"WARNING", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    textTerbilang.setText(""+koperasi.angka(konvert)+"Rupiah");
+                }
+            }
+        });
+        buttonCetak.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Proses Berhasil");
+            }
+        });
+        btnKeluar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+}
